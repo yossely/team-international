@@ -8,6 +8,7 @@ import { reducers } from './store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesModule } from './employees/employees.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { EmployeesModule } from './employees/employees.module';
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
-    EmployeesModule
+    EmployeesModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
