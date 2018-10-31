@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { EmployeesListDataSource } from './employees-list-datasource';
+import { Employee } from '../shared/employee.model';
 
 @Component({
   selector: 'app-employees-list',
@@ -12,10 +13,22 @@ export class EmployeesListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource: EmployeesListDataSource;
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  /** Columns displayed in the table */
+  displayedColumns = ['name', 'age', 'username', 'hireDate', 'actions'];
 
   ngOnInit() {
     this.dataSource = new EmployeesListDataSource(this.paginator, this.sort);
+  }
+
+  editEmployee(emp: Employee) {
+    console.log('edit employee', emp.name);
+  }
+
+  deleteEmployee(emp: Employee) {
+    console.log('delete employee', emp.name);
+  }
+
+  viewEmployee(emp: Employee) {
+    console.log('view employee', emp.name);
   }
 }

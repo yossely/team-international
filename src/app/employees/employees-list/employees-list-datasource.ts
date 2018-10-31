@@ -2,35 +2,32 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import { Employee, JOB_TITLE_KITCHEN, AREA, STATUS } from '../shared/employee.model';
+import { EmployeeKitchen } from '../shared/employee-kitchen.model';
 
-// TODO: Replace this with your own data model type
-export interface EmployeesListItem {
-  name: string;
-  id: number;
-}
 
 // TODO: replace this with real data from your application
-const EXAMPLE_DATA: EmployeesListItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'},
+const EXAMPLE_DATA: Employee[] = [
+  new EmployeeKitchen({
+    name: 'a juliao',
+    birthDate: new Date(2012, 8, 22),
+    username: 'b',
+    hireDate: new Date(),
+    status: STATUS.ACTIVE,
+    area: AREA.KITCHEN,
+    jobTitle: JOB_TITLE_KITCHEN.CHEF,
+    tipRate: .23
+  } as EmployeeKitchen),
+  new EmployeeKitchen({
+    name: 'b juliao',
+    birthDate: new Date(2010, 8, 22),
+    username: 'a',
+    hireDate: new Date(2017, 10, 12),
+    status: STATUS.ACTIVE,
+    area: AREA.KITCHEN,
+    jobTitle: JOB_TITLE_KITCHEN.CHEF,
+    tipRate: .23
+  } as EmployeeKitchen)
 ];
 
 /**
@@ -38,8 +35,8 @@ const EXAMPLE_DATA: EmployeesListItem[] = [
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class EmployeesListDataSource extends DataSource<EmployeesListItem> {
-  data: EmployeesListItem[] = EXAMPLE_DATA;
+export class EmployeesListDataSource extends DataSource<Employee> {
+  data: Employee[] = EXAMPLE_DATA;
 
   constructor(private paginator: MatPaginator, private sort: MatSort) {
     super();
@@ -50,7 +47,7 @@ export class EmployeesListDataSource extends DataSource<EmployeesListItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<EmployeesListItem[]> {
+  connect(): Observable<Employee[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
@@ -71,13 +68,13 @@ export class EmployeesListDataSource extends DataSource<EmployeesListItem> {
    *  Called when the table is being destroyed. Use this function, to clean up
    * any open connections or free any held resources that were set up during connect.
    */
-  disconnect() {}
+  disconnect() { }
 
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: EmployeesListItem[]) {
+  private getPagedData(data: Employee[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -86,7 +83,7 @@ export class EmployeesListDataSource extends DataSource<EmployeesListItem> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: EmployeesListItem[]) {
+  private getSortedData(data: Employee[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -95,7 +92,9 @@ export class EmployeesListDataSource extends DataSource<EmployeesListItem> {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
         case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case 'username': return compare(+a.username, +b.username, isAsc);
+        case 'age': return compare(+a.age, +b.age, isAsc);
+        case 'hireDate': return compare(+a.hireDate, +b.hireDate, isAsc);
         default: return 0;
       }
     });

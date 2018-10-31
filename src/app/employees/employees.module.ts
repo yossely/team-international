@@ -1,8 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
-import { MatInputModule } from '@angular/material/input';
+import {
+  MatButtonModule,
+  MatIconModule,
+  MatInputModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatTableModule,
+} from '@angular/material';
 
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
@@ -14,7 +20,9 @@ import { EmployeesListComponent } from './employees-list/employees-list.componen
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   declarations: [EmployeesComponent, EmployeesListComponent]
 })
