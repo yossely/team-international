@@ -1,4 +1,5 @@
 import { Country } from '../../shared/models/country.model';
+import { BasicModel } from '../../shared/utils/basic-model.model';
 
 export enum STATUS {
   ACTIVE,
@@ -34,10 +35,18 @@ export interface Employee {
   status: STATUS;
   area: AREA;
   jobTitle: JOB_TITLE_SERVICES | JOB_TITLE_KITCHEN;
-  tipRate?: number;
 }
 
-export class Employee {
-  constructor(parameters) {
+export class Employee extends BasicModel<Employee> {
+  constructor(emp: Employee) {
+    super(emp);
+  }
+
+  get age(): number {
+    const timeDiff = Math.abs(new Date().getTime() - this.birthDate.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    // Transform the days on years
+    return Math.trunc(diffDays / 365);
   }
 }
