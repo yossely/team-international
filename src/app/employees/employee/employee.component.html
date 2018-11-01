@@ -13,7 +13,7 @@
     <input
       matInput
       [matDatepicker]="birthDatePicker"
-      [max]="maxDate"
+      [max]="today"
       (click)="birthDatePicker.open()"
       placeholder="Date of birth"
       readonly
@@ -26,9 +26,15 @@
   </mat-form-field>
 
   <!-- Country -->
+  <!-- TODO: implement better search functionality -->
   <mat-form-field>
     <mat-select placeholder="Country">
-      <mat-option value="ve">I corazon VEN</mat-option>
+      <mat-option
+        *ngFor="let country of countries$ | async"
+        value="country"
+      >
+        {{ country.name }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -45,7 +51,7 @@
     <input
       matInput
       [matDatepicker]="hireDatePicker"
-      [max]="maxDate"
+      [min]="today"
       (click)="hireDatePicker.open()"
       placeholder="Hire Date"
       readonly

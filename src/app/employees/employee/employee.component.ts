@@ -14,7 +14,7 @@ import { Country } from '../../shared/models/country.model';
 })
 export class EmployeeComponent implements OnInit {
 
-  maxDate = new Date();
+  today = new Date();
 
   employeeForm: FormGroup;
 
