@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Store
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers } from './store';
 import { CoreEffects } from './store/core/core.effects';
 
@@ -23,6 +24,7 @@ import { EmployeesModule } from './employees/employees.module';
     AppRoutingModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([CoreEffects]),
+    StoreDevtoolsModule.instrument(),
     EmployeesModule,
     BrowserAnimationsModule
   ],
