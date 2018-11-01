@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
+import { Store, select } from '@ngrx/store';
+import { AppState, selectCountries } from '../../store';
+import { LoadCountries } from '../../store/core/core.actions';
+import { Observable } from 'rxjs';
+import { Country } from '../../shared/models/country.model';
+
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
@@ -12,7 +18,9 @@ export class EmployeeComponent implements OnInit {
 
   employeeForm: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  countries$: Observable<Country[]>;
+
+  constructor(private fb: FormBuilder, private store: Store<AppState>) { }
 
   ngOnInit() {
     this.employeeForm = this.fb.group({
@@ -26,6 +34,9 @@ export class EmployeeComponent implements OnInit {
       jobTitle: new FormControl(),
       tipRate: new FormControl()
     });
+
+    this.store.dispatch(new LoadCountries());
+    this.countries$ = this.store.pipe(select(selectCountries));
   }
 
 }
