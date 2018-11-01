@@ -1,0 +1,103 @@
+<!-- TODO: add navigation back button -->
+<form [formGroup]="employeeForm">
+  <!-- Name -->
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Name"
+    >
+  </mat-form-field>
+
+  <!-- Birth date -->
+  <mat-form-field>
+    <input
+      matInput
+      [matDatepicker]="birthDatePicker"
+      [max]="maxDate"
+      (click)="birthDatePicker.open()"
+      placeholder="Date of birth"
+      readonly
+    >
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="birthDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #birthDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Country -->
+  <mat-form-field>
+    <mat-select placeholder="Country">
+      <mat-option value="ve">I corazon VEN</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Username -->
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Username"
+    >
+  </mat-form-field>
+
+  <!-- Hire date -->
+  <mat-form-field>
+    <input
+      matInput
+      [matDatepicker]="hireDatePicker"
+      [max]="maxDate"
+      (click)="hireDatePicker.open()"
+      placeholder="Hire Date"
+      readonly
+    >
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="hireDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #hireDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Area -->
+  <div>
+    <mat-button-toggle-group
+      #area="matButtonToggleGroup"
+      name="area"
+      aria-label="Employee area"
+      [value]="'services'"
+    >
+      <mat-button-toggle value="services">Services</mat-button-toggle>
+      <mat-button-toggle value="kitchen">Kitchen</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Job Title -->
+  <mat-form-field *ngIf="area.value === 'services'">
+    <mat-select placeholder="Job Title">
+      <mat-option value="host">Host</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="area.value === 'kitchen'">
+    <mat-select placeholder="Job Title">
+      <mat-option value="chef">Chef</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Tip Rate -->
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Tip Rate"
+      type="number"
+      class="example-right-align"
+    >
+    <span matPrefix>$</span>
+  </mat-form-field>
+
+  <!-- Status -->
+  <mat-slide-toggle
+    color="primary"
+    class="status-text"
+  >
+    Status
+  </mat-slide-toggle>
+</form>
