@@ -66,7 +66,7 @@
   <!-- Area -->
   <div>
     <mat-button-toggle-group
-      #area="matButtonToggleGroup"
+      #selectedArea="matButtonToggleGroup"
       name="area"
       aria-label="Employee area"
       [value]="'services'"
@@ -77,14 +77,14 @@
   </div>
 
   <!-- Job Title -->
-  <mat-form-field *ngIf="area.value === 'services'">
+  <mat-form-field>
     <mat-select placeholder="Job Title">
-      <mat-option value="host">Host</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field *ngIf="area.value === 'kitchen'">
-    <mat-select placeholder="Job Title">
-      <mat-option value="chef">Chef</mat-option>
+      <mat-option
+        *ngFor="let jobTitle of areas[selectedArea.value]"
+        value="jobTitle"
+      >
+        {{ jobTitle.value }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
