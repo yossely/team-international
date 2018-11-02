@@ -280,6 +280,10 @@
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-6.1.2.tgz#602f3ee9798e00179075ddef030ded88c28b1aa1"
 
+"@ngrx/entity@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@ngrx/entity/-/entity-6.1.2.tgz#4573adad159cf482b1895a1760766745997bd142"
+
 "@ngrx/schematics@^6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@ngrx/schematics/-/schematics-6.1.0.tgz#4e784da5502829700895ca87d4cc5da93bf3ec84"

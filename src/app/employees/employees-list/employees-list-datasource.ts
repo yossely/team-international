@@ -1,34 +1,13 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
+
+import { Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
-import { Employee, JOB_TITLE_KITCHEN, AREA, STATUS } from '../shared/employee.model';
-import { EmployeeKitchen } from '../shared/employee-kitchen.model';
 
+import { Store, select } from '@ngrx/store';
+import { AppState, selectAllEmployees } from '../../store';
 
-// TODO: replace this with real data from your application
-const EXAMPLE_DATA: Employee[] = [
-  new EmployeeKitchen({
-    name: 'a juliao',
-    birthDate: new Date(2012, 8, 22),
-    username: 'b',
-    hireDate: new Date(),
-    status: STATUS.ACTIVE,
-    area: AREA.KITCHEN,
-    jobTitle: JOB_TITLE_KITCHEN.CHEF,
-    tipRate: .23
-  } as EmployeeKitchen),
-  new EmployeeKitchen({
-    name: 'b juliao',
-    birthDate: new Date(2010, 8, 22),
-    username: 'a',
-    hireDate: new Date(2017, 10, 12),
-    status: STATUS.ACTIVE,
-    area: AREA.KITCHEN,
-    jobTitle: JOB_TITLE_KITCHEN.CHEF,
-    tipRate: .23
-  } as EmployeeKitchen)
-];
+import { Employee } from '../shared/employee.model';
 
 /**
  * Data source for the EmployeesList view. This class should
@@ -36,10 +15,20 @@ const EXAMPLE_DATA: Employee[] = [
  * (including sorting, pagination, and filtering).
  */
 export class EmployeesListDataSource extends DataSource<Employee> {
-  data: Employee[] = EXAMPLE_DATA;
+  data: Employee[];
 
-  constructor(private paginator: MatPaginator, private sort: MatSort) {
+  constructor(
+    private paginator: MatPaginator,
+    private sort: MatSort,
+    private store: Store<AppState>
+  ) {
     super();
+
+    // Save employees in data to update its length for the paginator
+    this.store.pipe(select(selectAllEmployees))
+      .subscribe(e => {
+        this.data = e;
+      });
   }
 
   /**
@@ -51,7 +40,7 @@ export class EmployeesListDataSource extends DataSource<Employee> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
-      observableOf(this.data),
+      this.store.pipe(select(selectAllEmployees)),
       this.paginator.page,
       this.sort.sortChange
     ];

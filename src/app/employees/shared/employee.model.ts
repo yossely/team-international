@@ -27,6 +27,7 @@ export enum JOB_TITLE_KITCHEN {
 }
 
 export interface Employee {
+  id: string;
   name: string;
   birthDate: Date;
   country: Country;
