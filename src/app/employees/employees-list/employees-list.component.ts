@@ -9,7 +9,7 @@ import { Employee, STATUS, AREA, JOB_TITLE_KITCHEN } from '../shared/employee.mo
 import { AddEmployee } from '../../store/employees/employees.actions';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
 
-const uuidv1 = require('uuid/v1');
+import * as uuidv1 from 'uuid/v1';
 
 @Component({
   selector: 'app-employees-list',

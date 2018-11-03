@@ -33,8 +33,18 @@ export const selectUserIds = createSelector(
 );
 
 export const selectAllEmployees = createSelector(
-  (state: AppState) => state.employees,
+  selectEmployeesState,
   fromEmployee.selectAllEmployees
+);
+
+export const selectCRUState = createSelector(
+  selectEmployeesState,
+  (empState: fromEmployee.EmployeesState) => empState.CRUState
+);
+
+export const selectCRUEmployee = createSelector(
+  selectEmployeesState,
+  (empState: fromEmployee.EmployeesState) => empState.CRUEmployee
 );
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];

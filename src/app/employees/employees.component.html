@@ -1,9 +1,10 @@
 <app-employees-list></app-employees-list>
 <button
   mat-fab
-  class="new-employee-button"
   [routerLink]="'employee'"
+  (click)="createEmployee()"
   color="primary"
+  class="new-employee-button"
 >
   <mat-icon aria-label="Create new employee">add</mat-icon>
 </button>
