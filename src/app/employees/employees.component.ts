@@ -23,13 +23,8 @@ export class EmployeesComponent implements OnInit {
       {
         CRUState: CRU_STATE.Create,
         CRUEmployee: new Employee({
-          name: 'Woompy',
-          birthDate: new Date(),
-          username: 'joao',
-          hireDate: new Date(),
-          area: AREA.KITCHEN,
-          jobTitle: 'Chef',
-          status: STATUS.INACTIVE
+          area: AREA.SERVICES,
+          status: STATUS.ACTIVE
         } as Employee)
       }
     ));

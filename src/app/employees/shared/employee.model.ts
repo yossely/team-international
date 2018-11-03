@@ -1,6 +1,8 @@
 import { Country } from '../../shared/models/country.model';
 import { BasicModel } from '../../shared/utils/basic-model.model';
 
+import * as uuidv1 from 'uuid/v1';
+
 export enum STATUS {
   ACTIVE = 1,
   INACTIVE = 0,
@@ -53,6 +55,7 @@ export interface Employee {
 export class Employee extends BasicModel<Employee> {
   constructor(emp: Employee) {
     super(emp);
+    this.id = uuidv1();
   }
 
   get age(): number {

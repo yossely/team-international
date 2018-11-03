@@ -11,6 +11,8 @@ import { Country } from '../../shared/models/country.model';
 import { Employee, AREA, availableJobs, Job } from '../shared/employee.model';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
+import { EmployeeKitchen } from '../shared/employee-kitchen.model';
+import { AddEmployee } from '../../store/employees/employees.actions';
 
 @Component({
   selector: 'app-employee',
@@ -30,7 +32,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   cruStates = CRU_STATE;
 
-  employee: Employee;
   employeeSubs: Subscription;
 
   cruState$: Observable<CRU_STATE>;
@@ -43,41 +44,40 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
     this.cruState$ = this.store.pipe(select(selectCRUState));
 
-    this.employeeSubs = this.store.pipe(select(selectCRUEmployee)).subscribe((e: Employee) => {
-      this.employee = e;
-      this.setCurrentJobTitles(this.employee.area);
+    this.employeeSubs = this.store.pipe(select(selectCRUEmployee)).subscribe((employee: Employee) => {
+      this.setCurrentJobTitles(employee.area);
 
       this.employeeForm = this.fb.group({
         name: new FormControl({
-          value: this.employee.name,
+          value: employee.name,
           disabled: false
         }, { validators: Validators.required }),
         birthDate: new FormControl({
-          value: this.employee.birthDate,
+          value: employee.birthDate,
           disabled: false
         }, { validators: Validators.required }),
         country: new FormControl({
-          value: this.employee.country,
+          value: employee.country,
           disabled: false
         }),
         username: new FormControl({
-          value: this.employee.username,
+          value: employee.username,
           disabled: false
         }, { validators: Validators.required }),
         hireDate: new FormControl({
-          value: this.employee.hireDate,
+          value: employee.hireDate,
           disabled: false
         }, { validators: Validators.required }),
         status: new FormControl({
-          value: this.employee.status,
+          value: employee.status,
           disabled: false
         }, { validators: Validators.required }),
         area: new FormControl({
-          value: this.employee.area,
+          value: employee.area,
           disabled: false
         }, { validators: Validators.required }),
         jobTitle: new FormControl({
-          value: this.employee.jobTitle,
+          value: employee.jobTitle,
           disabled: false
         }, { validators: Validators.required }),
       });
@@ -89,9 +89,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       });
 
       // Set tip rate form control when setting up the form group
-      if (this.employee.jobTitle &&
-        (this.employee.jobTitle === 'Waitress' || this.employee.jobTitle === 'Dinning Room Manager')) {
-        this.addTipRateFormControl((this.employee as EmployeeService).tipRate);
+      if (employee.jobTitle &&
+        (employee.jobTitle === 'Waitress' || employee.jobTitle === 'Dinning Room Manager')) {
+        this.addTipRateFormControl((employee as EmployeeService).tipRate);
       }
 
       // Update tip rate form control when job title change
@@ -120,6 +120,19 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       value: tipRate,
       disabled: false
     }, { validators: [Validators.required, Validators.min(1)] }));
+  }
+
+  saveNewEmployee() {
+    const newEmployeeRaw = this.employeeForm.getRawValue();
+    let newEmployee;
+
+    if (newEmployeeRaw.area === AREA.SERVICES) {
+      newEmployee = new EmployeeService(newEmployeeRaw);
+    } else {
+      newEmployee = new EmployeeKitchen(newEmployeeRaw);
+    }
+
+    this.store.dispatch(new AddEmployee(newEmployee));
   }
 
   private setCurrentJobTitles(area: AREA) {

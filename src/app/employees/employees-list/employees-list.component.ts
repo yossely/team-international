@@ -5,11 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store';
 
 import { EmployeesListDataSource } from './employees-list-datasource';
-import { Employee, STATUS, AREA } from '../shared/employee.model';
-import { AddEmployee } from '../../store/employees/employees.actions';
-import { EmployeeKitchen } from '../shared/employee-kitchen.model';
-
-import * as uuidv1 from 'uuid/v1';
+import { Employee } from '../shared/employee.model';
 
 @Component({
   selector: 'app-employees-list',
@@ -30,19 +26,6 @@ export class EmployeesListComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new EmployeesListDataSource(this.paginator, this.sort, this.store);
-
-    // Test add one employee
-    this.store.dispatch(new AddEmployee(new EmployeeKitchen({
-      id: uuidv1(),
-      name: 'a juliao',
-      birthDate: new Date(2012, 8, 22),
-      username: 'b',
-      hireDate: new Date(),
-      status: STATUS.ACTIVE,
-      area: AREA.KITCHEN,
-      jobTitle: 'Chef',
-      tipRate: .23
-    } as EmployeeKitchen)));
   }
 
   editEmployee(emp: Employee) {

@@ -143,4 +143,12 @@
     Status
   </mat-slide-toggle>
 </form>
-{{ 'is form valid? ' + employeeForm?.valid }}
+
+<button
+  mat-flat-button
+  (click)="saveNewEmployee()"
+  [disabled]="employeeForm.invalid"
+  color="primary"
+>
+  Save
+</button>
