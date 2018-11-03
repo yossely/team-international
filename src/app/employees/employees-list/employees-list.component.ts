@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store';
 
 import { EmployeesListDataSource } from './employees-list-datasource';
-import { Employee, STATUS, AREA, JOB_TITLE_KITCHEN } from '../shared/employee.model';
+import { Employee, STATUS, AREA } from '../shared/employee.model';
 import { AddEmployee } from '../../store/employees/employees.actions';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
 
@@ -40,7 +40,7 @@ export class EmployeesListComponent implements OnInit {
       hireDate: new Date(),
       status: STATUS.ACTIVE,
       area: AREA.KITCHEN,
-      jobTitle: JOB_TITLE_KITCHEN.CHEF,
+      jobTitle: 'Chef',
       tipRate: .23
     } as EmployeeKitchen)));
   }

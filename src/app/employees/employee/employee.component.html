@@ -4,7 +4,10 @@
   <mat-form-field>
     <input
       matInput
+      formControlName="name"
       placeholder="Name"
+      name="name"
+      required
     >
   </mat-form-field>
 
@@ -12,11 +15,14 @@
   <mat-form-field>
     <input
       matInput
+      formControlName="birthDate"
       [matDatepicker]="birthDatePicker"
       [max]="today"
       (click)="birthDatePicker.open()"
       placeholder="Date of birth"
+      name="birthDate"
       readonly
+      required
     >
     <mat-datepicker-toggle
       matSuffix
@@ -27,7 +33,7 @@
 
   <!-- Country -->
   <!-- TODO: implement better search functionality -->
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-select placeholder="Country">
       <mat-option
         *ngFor="let country of countries$ | async"
@@ -36,25 +42,31 @@
         {{ country.name }}
       </mat-option>
     </mat-select>
-  </mat-form-field>
+  </mat-form-field> -->
 
   <!-- Username -->
   <mat-form-field>
     <input
+      formControlName="username"
       matInput
       placeholder="Username"
+      name="username"
+      required
     >
   </mat-form-field>
 
   <!-- Hire date -->
   <mat-form-field>
     <input
+      formControlName="hireDate"
       matInput
       [matDatepicker]="hireDatePicker"
       [min]="today"
       (click)="hireDatePicker.open()"
       placeholder="Hire Date"
+      name="hireDate"
       readonly
+      required
     >
     <mat-datepicker-toggle
       matSuffix
@@ -66,44 +78,63 @@
   <!-- Area -->
   <div>
     <mat-button-toggle-group
+      formControlName="area"
       #selectedArea="matButtonToggleGroup"
       name="area"
       aria-label="Employee area"
-      [value]="'services'"
+      required
     >
-      <mat-button-toggle value="services">Services</mat-button-toggle>
-      <mat-button-toggle value="kitchen">Kitchen</mat-button-toggle>
+      <mat-button-toggle
+        *ngFor="let job of jobs"
+        [value]="job.area"
+      >
+        {{ job.area }}
+      </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
 
   <!-- Job Title -->
   <mat-form-field>
-    <mat-select placeholder="Job Title">
+    <mat-select
+      formControlName="jobTitle"
+      placeholder="Job Title"
+      name="jobTitle"
+      required
+    >
       <mat-option
-        *ngFor="let jobTitle of areas[selectedArea.value]"
-        value="jobTitle"
+        *ngFor="let jobTitle of currentJobTitles"
+        [value]="jobTitle"
       >
-        {{ jobTitle.value }}
+        {{ jobTitle }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <!-- Tip Rate -->
-  <mat-form-field>
+  <mat-form-field *ngIf="(employeeForm.get('jobTitle').value === 'Waitress' ||
+     employeeForm.get('jobTitle').value === 'Dinning Room Manager') &&
+     employeeForm.get('tipRate')">
     <input
+      formControlName="tipRate"
       matInput
-      placeholder="Tip Rate"
       type="number"
+      placeholder="Tip Rate"
+      name="tipRate"
       class="example-right-align"
+      required
     >
     <span matPrefix>$</span>
   </mat-form-field>
 
   <!-- Status -->
   <mat-slide-toggle
+    formControlName="status"
     color="primary"
     class="status-text"
+    name="status"
+    required
   >
     Status
   </mat-slide-toggle>
 </form>
+{{ 'is form valid? ' + employeeForm?.valid }}

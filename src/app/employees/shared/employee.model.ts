@@ -2,8 +2,8 @@ import { Country } from '../../shared/models/country.model';
 import { BasicModel } from '../../shared/utils/basic-model.model';
 
 export enum STATUS {
-  ACTIVE,
-  INACTIVE
+  ACTIVE = 1,
+  INACTIVE = 0,
 }
 
 export enum AREA {
@@ -11,20 +11,32 @@ export enum AREA {
   KITCHEN = 'Kitchen'
 }
 
-export enum JOB_TITLE_SERVICES {
-  MANAGER = 'Manager',
-  HOST = 'Host',
-  TUTTOFARE = 'Tuttofare',
-  WAITRESS = 'Waitress',
-  DINNING_ROOM_MANAGER = 'Dinning Room Manager'
+export interface Job {
+  area: AREA;
+  jobTitles: string[];
 }
 
-export enum JOB_TITLE_KITCHEN {
-  CHEF = 'Chef',
-  SOUS_CHEF = 'Sous Chef',
-  DISHWASHER = 'Dishwasher',
-  COOK = 'Cook',
-}
+export const availableJobs: Job[] = [
+  {
+    area: AREA.SERVICES,
+    jobTitles: [
+      'Manager',
+      'Host',
+      'Tuttofare',
+      'Waitress',
+      'Dinning Room Manager',
+    ]
+  },
+  {
+    area: AREA.KITCHEN,
+    jobTitles: [
+      'Chef',
+      'Sous Chef',
+      'Dishwasher',
+      'Cook',
+    ]
+  }
+];
 
 export interface Employee {
   id: string;
@@ -35,7 +47,7 @@ export interface Employee {
   hireDate: Date;
   status: STATUS;
   area: AREA;
-  jobTitle: JOB_TITLE_SERVICES | JOB_TITLE_KITCHEN;
+  jobTitle: string;
 }
 
 export class Employee extends BasicModel<Employee> {

@@ -1,8 +1,7 @@
-import { AREA, JOB_TITLE_SERVICES, Employee } from './employee.model';
+import { AREA, Employee } from './employee.model';
 
 export interface EmployeeService {
   area: AREA.SERVICES;
-  jobTitle: JOB_TITLE_SERVICES;
   tipRate?: number;
 }
 

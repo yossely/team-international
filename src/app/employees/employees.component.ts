@@ -3,10 +3,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { CRUEmployee } from '../store/employees/employees.actions';
 
-import { Employee } from './shared/employee.model';
+import { Employee, AREA, STATUS } from './shared/employee.model';
 import { CRU_STATE } from '../shared/models/cru-states.enum';
-
-import * as uuidv1 from 'uuid/v1';
 
 @Component({
   selector: 'app-employees',
@@ -23,8 +21,15 @@ export class EmployeesComponent implements OnInit {
   createEmployee() {
     this.store.dispatch(new CRUEmployee(
       {
-        CRUState: CRU_STATE.Create, CRUEmployee: new Employee({
-          id: uuidv1()
+        CRUState: CRU_STATE.Create,
+        CRUEmployee: new Employee({
+          name: 'Woompy',
+          birthDate: new Date(),
+          username: 'joao',
+          hireDate: new Date(),
+          area: AREA.KITCHEN,
+          jobTitle: 'Chef',
+          status: STATUS.INACTIVE
         } as Employee)
       }
     ));
