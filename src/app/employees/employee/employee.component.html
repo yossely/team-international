@@ -33,16 +33,22 @@
 
   <!-- Country -->
   <!-- TODO: implement better search functionality -->
-  <!-- <mat-form-field>
-    <mat-select placeholder="Country">
+  <mat-form-field>
+    <mat-select
+      formControlName="country"
+      [compareWith]="compareCountry"
+      placeholder="Country"
+      name="country"
+      required
+    >
       <mat-option
         *ngFor="let country of countries$ | async"
-        value="country"
+        [value]="country"
       >
         {{ country.name }}
       </mat-option>
     </mat-select>
-  </mat-form-field> -->
+  </mat-form-field>
 
   <!-- Username -->
   <mat-form-field>

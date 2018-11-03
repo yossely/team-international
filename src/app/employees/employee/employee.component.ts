@@ -56,11 +56,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
           value: this.employee.birthDate,
           disabled: false
         }, { validators: Validators.required }),
-        // // TODO: see how to handle country
-        // country: new FormControl({
-        //   value: this.employee.country,
-        //   disabled: false
-        // }),
+        country: new FormControl({
+          value: this.employee.country,
+          disabled: false
+        }),
         username: new FormControl({
           value: this.employee.username,
           disabled: false
@@ -110,6 +109,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+  }
+
+  compareCountry(countryOpt: Country, countrySelected: Country) {
+    return countrySelected ? countryOpt.name === countrySelected.name : false;
   }
 
   private addTipRateFormControl(tipRate: number = 0) {
