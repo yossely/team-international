@@ -1,25 +1,35 @@
-import { createEntityAdapter, EntityState, EntityAdapter } from '@ngrx/entity';
 import { Employee } from '../../employees/shared/employee.model';
 import { EmployeeActions, EmployeeActionTypes } from './employees.actions';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 
-const employeeAdapter: EntityAdapter<Employee> = createEntityAdapter<Employee>();
-
-export interface EmployeesState extends EntityState<Employee> {
+export interface EmployeesState {
+  employees: Employee[];
   CRUState?: CRU_STATE;
   CRUEmployee?: Employee;
 }
 
-export const initialState: EmployeesState = employeeAdapter.getInitialState();
+export const initialState: EmployeesState = {
+  employees: []
+};
 
 export function employeesReducer(state = initialState, action: EmployeeActions): EmployeesState {
   switch (action.type) {
     case EmployeeActionTypes.AddEmployee: {
-      return employeeAdapter.addOne(action.payload, state);
+      return {
+        ...state,
+        employees: [...state.employees, action.payload]
+      };
     }
 
     case EmployeeActionTypes.UpdateEmployee: {
-      return employeeAdapter.updateOne(action.payload.employee, state);
+      let emp: Employee[] = [...state.employees];
+      const newEmp: Employee = action.payload;
+      emp = emp.map(e => e.id === newEmp.id ? newEmp : e);
+
+      return {
+        ...state,
+        employees: emp
+      };
     }
 
     case EmployeeActionTypes.CRUEmployee: {
@@ -34,11 +44,3 @@ export function employeesReducer(state = initialState, action: EmployeeActions):
       return state;
   }
 }
-
-// Selectors
-const { selectAll, selectIds } = employeeAdapter.getSelectors();
-
-export const selectAllEmployees = selectAll;
-
-// select the array of employees ids
-export const selectEmployeesIds = selectIds;

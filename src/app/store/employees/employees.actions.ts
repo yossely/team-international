@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import { Update } from '@ngrx/entity';
 
 import { Employee } from '../../employees/shared/employee.model';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
@@ -24,7 +23,7 @@ export class AddEmployee implements Action {
 export class UpdateEmployee implements Action {
   readonly type = EmployeeActionTypes.UpdateEmployee;
 
-  constructor(public payload: { employee: Update<Employee> }) { }
+  constructor(public payload: Employee) { }
 }
 
 export class CRUEmployee implements Action {

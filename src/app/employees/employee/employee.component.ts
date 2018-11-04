@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Observable, Subscription } from 'rxjs';
@@ -13,7 +14,6 @@ import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
 import { AddEmployee, CRUEmployeePayloadModel, UpdateEmployee } from '../../store/employees/employees.actions';
-import { Update } from '@ngrx/entity';
 
 @Component({
   selector: 'app-employee',
@@ -41,7 +41,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private router: Router
   ) {
     this.jobs = availableJobs;
 
@@ -137,15 +138,16 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       newEmployee = new EmployeeKitchen(newEmployeeRaw);
     }
 
+    console.log(newEmployee);
+
     if (this.currentCRUState === CRU_STATE.Create) {
       this.store.dispatch(new AddEmployee(newEmployee));
     } else {
-      const updatedEmployee: Update<Employee> = {
-        id: this.employee.id,
-        changes: newEmployee
-      };
-      this.store.dispatch(new UpdateEmployee({ employee: updatedEmployee }));
+      newEmployee.id = this.employee.id;
+      this.store.dispatch(new UpdateEmployee(newEmployee));
     }
+
+    this.router.navigate(['']);
   }
 
   private setCurrentJobTitles(area: AREA) {

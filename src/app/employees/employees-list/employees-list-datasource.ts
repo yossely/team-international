@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 
-import { Observable, merge } from 'rxjs';
+import { Observable, merge, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
@@ -17,6 +17,8 @@ import { Employee } from '../shared/employee.model';
 export class EmployeesListDataSource extends DataSource<Employee> {
   data: Employee[];
 
+  allEmployeesSubs: Subscription;
+
   constructor(
     private paginator: MatPaginator,
     private sort: MatSort,
@@ -25,7 +27,7 @@ export class EmployeesListDataSource extends DataSource<Employee> {
     super();
 
     // Save employees in data to update its length for the paginator
-    this.store.pipe(select(selectAllEmployees))
+    this.allEmployeesSubs = this.store.pipe(select(selectAllEmployees))
       .subscribe(e => {
         this.data = e;
       });
@@ -57,7 +59,9 @@ export class EmployeesListDataSource extends DataSource<Employee> {
    *  Called when the table is being destroyed. Use this function, to clean up
    * any open connections or free any held resources that were set up during connect.
    */
-  disconnect() { }
+  disconnect() {
+    this.allEmployeesSubs.unsubscribe();
+  }
 
   /**
    * Paginate the data (client-side). If you're using server-side pagination,

@@ -27,14 +27,9 @@ export const selectCountries = createSelector(
 // Employees Selectors
 export const selectEmployeesState = createFeatureSelector<fromEmployee.EmployeesState>('employees');
 
-export const selectUserIds = createSelector(
-  selectEmployeesState,
-  fromEmployee.selectEmployeesIds
-);
-
 export const selectAllEmployees = createSelector(
   selectEmployeesState,
-  fromEmployee.selectAllEmployees
+  (empState: fromEmployee.EmployeesState) => empState.employees
 );
 
 export const selectCRUState = createSelector(
