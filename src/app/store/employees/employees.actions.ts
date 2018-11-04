@@ -6,6 +6,7 @@ import { CRU_STATE } from '../../shared/models/cru-states.enum';
 export enum EmployeeActionTypes {
   AddEmployee = '[Employee] Add Employee',
   UpdateEmployee = '[Employee] Update Employee',
+  DeleteEmployee = '[Employee] Delete Employee',
   CRUEmployee = '[Employee] Create Read or Update an Employee',
 }
 
@@ -26,10 +27,16 @@ export class UpdateEmployee implements Action {
   constructor(public payload: Employee) { }
 }
 
+export class DeleteEmployee implements Action {
+  readonly type = EmployeeActionTypes.DeleteEmployee;
+
+  constructor(public payload: Employee) { }
+}
+
 export class CRUEmployee implements Action {
   readonly type = EmployeeActionTypes.CRUEmployee;
 
   constructor(public payload: CRUEmployeePayloadModel) { }
 }
 
-export type EmployeeActions = AddEmployee | CRUEmployee | UpdateEmployee;
+export type EmployeeActions = AddEmployee | CRUEmployee | UpdateEmployee | DeleteEmployee;

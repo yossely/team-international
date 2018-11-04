@@ -32,6 +32,17 @@ export function employeesReducer(state = initialState, action: EmployeeActions):
       };
     }
 
+    case EmployeeActionTypes.DeleteEmployee: {
+      let emp: Employee[] = [...state.employees];
+      const empToDelete: Employee = action.payload;
+      emp = emp.filter(e => e.id !== empToDelete.id);
+
+      return {
+        ...state,
+        employees: emp
+      };
+    }
+
     case EmployeeActionTypes.CRUEmployee: {
       return {
         ...state,
