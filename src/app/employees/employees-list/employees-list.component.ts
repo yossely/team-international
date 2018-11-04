@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatDialogRef, MatDialog } from '@angular/material';
 
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store';
 
+import { filter } from 'rxjs/operators';
+
 import { EmployeesListDataSource } from './employees-list-datasource';
 import { Employee } from '../shared/employee.model';
 import { DeleteEmployee } from '../../store/employees/employees.actions';
+import { ConfirmationModalComponent } from 'src/app/shared/components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-employees-list',
@@ -21,8 +24,14 @@ export class EmployeesListComponent implements OnInit {
   /** Columns displayed in the table */
   displayedColumns = ['name', 'age', 'username', 'hireDate', 'actions'];
 
+  /**
+   * A reference of the current dialog present
+   */
+  private dialogRef: MatDialogRef<ConfirmationModalComponent>;
+
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -30,6 +39,21 @@ export class EmployeesListComponent implements OnInit {
   }
 
   deleteEmployee(emp: Employee) {
-    this.store.dispatch(new DeleteEmployee(emp));
+    // Open the confirmation dialog
+    this.dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: {
+        title: 'Are you sure?',
+        body: `Do you want to delete the employee ${emp.name}`,
+        cancelButton: 'Cancel',
+        confirmButton: 'Delete'
+      }
+    });
+
+    this.dialogRef.afterClosed().pipe(
+      filter(confirmDeletion => confirmDeletion)
+    )
+      .subscribe(() => {
+        this.store.dispatch(new DeleteEmployee(emp));
+      });
   }
 }

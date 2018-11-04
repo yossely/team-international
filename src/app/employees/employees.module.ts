@@ -15,17 +15,21 @@ import {
   MatNativeDateModule,
   MatButtonToggleModule,
   MatSlideToggleModule,
+  MatDialogModule,
 } from '@angular/material';
 
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
 import { EmployeesListComponent } from './employees-list/employees-list.component';
 import { EmployeeComponent } from './employee/employee.component';
+import { SharedModule } from '../shared/shared.module';
+
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     EmployeesRoutingModule,
+    SharedModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -37,6 +41,7 @@ import { EmployeeComponent } from './employee/employee.component';
     MatNativeDateModule,
     MatButtonToggleModule,
     MatSlideToggleModule,
+    MatDialogModule,
   ],
   declarations: [
     EmployeesComponent,
