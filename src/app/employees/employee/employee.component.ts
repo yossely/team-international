@@ -22,7 +22,7 @@ import { AddEmployee, CRUEmployeePayloadModel, UpdateEmployee } from '../../stor
 })
 export class EmployeeComponent implements OnInit, OnDestroy {
 
-  today = new Date();
+  eighteenYearsBeforeToday: Date;
 
   employeeForm: FormGroup;
 
@@ -44,6 +44,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router
   ) {
+    // Rest 18 years to today
+    this.eighteenYearsBeforeToday = new Date();
+    this.eighteenYearsBeforeToday.setFullYear(this.eighteenYearsBeforeToday.getFullYear() - 18);
+
     this.jobs = availableJobs;
 
     this.employeeSubs = this.store.pipe(select(selectCRUState)).subscribe((cruState: CRUEmployeePayloadModel) => {
@@ -69,7 +73,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         username: new FormControl({
           value: this.employee.username,
           disabled: disableFields
-        }, { validators: Validators.required }),
+        }, { validators: [Validators.required, Validators.pattern(/^[\w]+$/)] }),
         hireDate: new FormControl({
           value: this.employee.hireDate,
           disabled: disableFields
