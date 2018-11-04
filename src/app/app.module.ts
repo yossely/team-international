@@ -7,12 +7,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { reducers } from './store';
 import { CoreEffects } from './store/core/core.effects';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesModule } from './employees/employees.module';
+import { CustomSerializer } from './store/router/router.reducer';
 
 @NgModule({
   declarations: [
@@ -24,11 +26,13 @@ import { EmployeesModule } from './employees/employees.module';
     AppRoutingModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([CoreEffects]),
+    // Connects RouterModule with StoreModule
+    StoreRouterConnectingModule.forRoot(),
     StoreDevtoolsModule.instrument(),
     EmployeesModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

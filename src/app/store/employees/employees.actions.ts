@@ -7,12 +7,11 @@ export enum EmployeeActionTypes {
   AddEmployee = '[Employee] Add Employee',
   UpdateEmployee = '[Employee] Update Employee',
   DeleteEmployee = '[Employee] Delete Employee',
-  CRUEmployee = '[Employee] Create Read or Update an Employee',
 }
 
-export interface CRUEmployeePayloadModel {
-  CRUState: CRU_STATE;
-  CRUEmployee: Employee;
+export interface CRUEmployeeModel {
+  action: CRU_STATE;
+  employee: Employee;
 }
 
 export class AddEmployee implements Action {
@@ -33,10 +32,4 @@ export class DeleteEmployee implements Action {
   constructor(public payload: Employee) { }
 }
 
-export class CRUEmployee implements Action {
-  readonly type = EmployeeActionTypes.CRUEmployee;
-
-  constructor(public payload: CRUEmployeePayloadModel) { }
-}
-
-export type EmployeeActions = AddEmployee | CRUEmployee | UpdateEmployee | DeleteEmployee;
+export type EmployeeActions = AddEmployee | UpdateEmployee | DeleteEmployee;

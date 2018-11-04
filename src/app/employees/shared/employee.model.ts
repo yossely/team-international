@@ -3,11 +3,6 @@ import { BasicModel } from '../../shared/utils/basic-model.model';
 
 import * as uuidv1 from 'uuid/v1';
 
-export enum STATUS {
-  ACTIVE = 1,
-  INACTIVE = 0,
-}
-
 export enum AREA {
   SERVICES = 'Services',
   KITCHEN = 'Kitchen'
@@ -47,15 +42,24 @@ export interface Employee {
   country: Country;
   username: string;
   hireDate: Date;
-  status: STATUS;
+  /**
+   * Employee's status
+   *
+   * true - active
+   * false - inactive
+   */
+  status: boolean;
   area: AREA;
   jobTitle: string;
 }
 
 export class Employee extends BasicModel<Employee> {
-  constructor(emp: Employee) {
+  constructor(emp?: Employee) {
     super(emp);
-    this.id = uuidv1();
+    // Defaults
+    this.id = this.id ? this.id : uuidv1();
+    this.area = this.area ? this.area : AREA.SERVICES;
+    this.status = this.status !== undefined ? this.status : true;
   }
 
   get age(): number {

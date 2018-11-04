@@ -91,20 +91,18 @@
         mat-cell
         *matCellDef="let element"
       >
-        <button
+        <a
           mat-icon-button
-          [routerLink]="'employee'"
-          (click)="editEmployee(element)"
+          [routerLink]="[ '/employee/edit/', element.id ]"
         >
           <mat-icon aria-label="Edit Employee">edit</mat-icon>
-        </button>
-        <button
+        </a>
+        <a
           mat-icon-button
-          [routerLink]="'employee'"
-          (click)="viewEmployee(element)"
+          [routerLink]="[ '/employee/view/', element.id ]"
         >
           <mat-icon aria-label="View Employee Details">remove_red_eye</mat-icon>
-        </button>
+        </a>
         <button
           mat-icon-button
           color="warn"

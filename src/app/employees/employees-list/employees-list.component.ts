@@ -6,8 +6,7 @@ import { AppState } from 'src/app/store';
 
 import { EmployeesListDataSource } from './employees-list-datasource';
 import { Employee } from '../shared/employee.model';
-import { CRUEmployee } from '../../store/employees/employees.actions';
-import { CRU_STATE } from '../../shared/models/cru-states.enum';
+import { DeleteEmployee } from '../../store/employees/employees.actions';
 
 @Component({
   selector: 'app-employees-list',
@@ -30,15 +29,7 @@ export class EmployeesListComponent implements OnInit {
     this.dataSource = new EmployeesListDataSource(this.paginator, this.sort, this.store);
   }
 
-  editEmployee(emp: Employee) {
-    this.store.dispatch(new CRUEmployee({ CRUState: CRU_STATE.Update, CRUEmployee: emp }));
-  }
-
   deleteEmployee(emp: Employee) {
-    console.log('delete employee', emp.name);
-  }
-
-  viewEmployee(emp: Employee) {
-    this.store.dispatch(new CRUEmployee({ CRUState: CRU_STATE.Read, CRUEmployee: emp }));
+    this.store.dispatch(new DeleteEmployee(emp));
   }
 }

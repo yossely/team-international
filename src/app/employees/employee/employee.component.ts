@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs';
 
 import { Store, select } from '@ngrx/store';
-import { AppState, selectCountries, selectCRUState } from '../../store';
+import { AppState, selectCountries, getSelectedEmployee } from '../../store';
 import { LoadCountries } from '../../store/core/core.actions';
 
 import { Country } from '../../shared/models/country.model';
@@ -13,7 +13,7 @@ import { AREA, availableJobs, Job, Employee } from '../shared/employee.model';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
-import { AddEmployee, CRUEmployeePayloadModel, UpdateEmployee } from '../../store/employees/employees.actions';
+import { AddEmployee, UpdateEmployee } from '../../store/employees/employees.actions';
 
 @Component({
   selector: 'app-employee',
@@ -50,11 +50,11 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
     this.jobs = availableJobs;
 
-    this.employeeSubs = this.store.pipe(select(selectCRUState)).subscribe((cruState: CRUEmployeePayloadModel) => {
-      this.employee = cruState.CRUEmployee;
+    this.employeeSubs = this.store.pipe(select(getSelectedEmployee)).subscribe((cruState) => {
+      this.employee = cruState.employee;
       this.setCurrentJobTitles(this.employee.area);
 
-      this.currentCRUState = cruState.CRUState;
+      this.currentCRUState = cruState.action;
       const disableFields = this.currentCRUState === CRU_STATE.Read;
 
       this.employeeForm = this.fb.group({
@@ -134,15 +134,13 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   saveUpdateEmployee() {
     const newEmployeeRaw = this.employeeForm.getRawValue();
-    let newEmployee;
+    let newEmployee: Employee;
 
     if (newEmployeeRaw.area === AREA.SERVICES) {
       newEmployee = new EmployeeService(newEmployeeRaw);
     } else {
       newEmployee = new EmployeeKitchen(newEmployeeRaw);
     }
-
-    console.log(newEmployee);
 
     if (this.currentCRUState === CRU_STATE.Create) {
       this.store.dispatch(new AddEmployee(newEmployee));
