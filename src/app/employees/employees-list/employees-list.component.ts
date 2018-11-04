@@ -6,6 +6,8 @@ import { AppState } from 'src/app/store';
 
 import { EmployeesListDataSource } from './employees-list-datasource';
 import { Employee } from '../shared/employee.model';
+import { CRUEmployee } from '../../store/employees/employees.actions';
+import { CRU_STATE } from '../../shared/models/cru-states.enum';
 
 @Component({
   selector: 'app-employees-list',
@@ -29,7 +31,7 @@ export class EmployeesListComponent implements OnInit {
   }
 
   editEmployee(emp: Employee) {
-    console.log('edit employee', emp.name);
+    this.store.dispatch(new CRUEmployee({ CRUState: CRU_STATE.Update, CRUEmployee: emp }));
   }
 
   deleteEmployee(emp: Employee) {
@@ -37,6 +39,6 @@ export class EmployeesListComponent implements OnInit {
   }
 
   viewEmployee(emp: Employee) {
-    console.log('view employee', emp.name);
+    this.store.dispatch(new CRUEmployee({ CRUState: CRU_STATE.Read, CRUEmployee: emp }));
   }
 }

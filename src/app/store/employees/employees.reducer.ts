@@ -1,9 +1,9 @@
-import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { createEntityAdapter, EntityState, EntityAdapter } from '@ngrx/entity';
 import { Employee } from '../../employees/shared/employee.model';
 import { EmployeeActions, EmployeeActionTypes } from './employees.actions';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 
-const employeeAdapter = createEntityAdapter<Employee>();
+const employeeAdapter: EntityAdapter<Employee> = createEntityAdapter<Employee>();
 
 export interface EmployeesState extends EntityState<Employee> {
   CRUState?: CRU_STATE;
@@ -16,6 +16,10 @@ export function employeesReducer(state = initialState, action: EmployeeActions):
   switch (action.type) {
     case EmployeeActionTypes.AddEmployee: {
       return employeeAdapter.addOne(action.payload, state);
+    }
+
+    case EmployeeActionTypes.UpdateEmployee: {
+      return employeeAdapter.updateOne(action.payload.employee, state);
     }
 
     case EmployeeActionTypes.CRUEmployee: {

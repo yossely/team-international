@@ -4,15 +4,16 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs';
 
 import { Store, select } from '@ngrx/store';
-import { AppState, selectCountries, selectCRUState, selectCRUEmployee } from '../../store';
+import { AppState, selectCountries, selectCRUState } from '../../store';
 import { LoadCountries } from '../../store/core/core.actions';
 
 import { Country } from '../../shared/models/country.model';
-import { Employee, AREA, availableJobs, Job } from '../shared/employee.model';
+import { AREA, availableJobs, Job, Employee } from '../shared/employee.model';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
-import { AddEmployee } from '../../store/employees/employees.actions';
+import { AddEmployee, CRUEmployeePayloadModel, UpdateEmployee } from '../../store/employees/employees.actions';
+import { Update } from '@ngrx/entity';
 
 @Component({
   selector: 'app-employee',
@@ -30,6 +31,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   jobs: Job[];
   currentJobTitles: string[];
 
+  private employee: Employee;
+  currentCRUState: CRU_STATE;
   cruStates = CRU_STATE;
 
   employeeSubs: Subscription;
@@ -42,43 +45,45 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   ) {
     this.jobs = availableJobs;
 
-    this.cruState$ = this.store.pipe(select(selectCRUState));
+    this.employeeSubs = this.store.pipe(select(selectCRUState)).subscribe((cruState: CRUEmployeePayloadModel) => {
+      this.employee = cruState.CRUEmployee;
+      this.setCurrentJobTitles(this.employee.area);
 
-    this.employeeSubs = this.store.pipe(select(selectCRUEmployee)).subscribe((employee: Employee) => {
-      this.setCurrentJobTitles(employee.area);
+      this.currentCRUState = cruState.CRUState;
+      const disableFields = this.currentCRUState === CRU_STATE.Read;
 
       this.employeeForm = this.fb.group({
         name: new FormControl({
-          value: employee.name,
-          disabled: false
+          value: this.employee.name,
+          disabled: disableFields
         }, { validators: Validators.required }),
         birthDate: new FormControl({
-          value: employee.birthDate,
-          disabled: false
+          value: this.employee.birthDate,
+          disabled: disableFields
         }, { validators: Validators.required }),
         country: new FormControl({
-          value: employee.country,
-          disabled: false
+          value: this.employee.country,
+          disabled: disableFields
         }),
         username: new FormControl({
-          value: employee.username,
-          disabled: false
+          value: this.employee.username,
+          disabled: disableFields
         }, { validators: Validators.required }),
         hireDate: new FormControl({
-          value: employee.hireDate,
-          disabled: false
+          value: this.employee.hireDate,
+          disabled: disableFields
         }, { validators: Validators.required }),
         status: new FormControl({
-          value: employee.status,
-          disabled: false
+          value: this.employee.status,
+          disabled: disableFields
         }, { validators: Validators.required }),
         area: new FormControl({
-          value: employee.area,
-          disabled: false
+          value: this.employee.area,
+          disabled: disableFields
         }, { validators: Validators.required }),
         jobTitle: new FormControl({
-          value: employee.jobTitle,
-          disabled: false
+          value: this.employee.jobTitle,
+          disabled: disableFields
         }, { validators: Validators.required }),
       });
 
@@ -89,9 +94,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       });
 
       // Set tip rate form control when setting up the form group
-      if (employee.jobTitle &&
-        (employee.jobTitle === 'Waitress' || employee.jobTitle === 'Dinning Room Manager')) {
-        this.addTipRateFormControl((employee as EmployeeService).tipRate);
+      if (this.employee.jobTitle &&
+        (this.employee.jobTitle === 'Waitress' || this.employee.jobTitle === 'Dinning Room Manager')) {
+        this.addTipRateFormControl((this.employee as EmployeeService).tipRate);
       }
 
       // Update tip rate form control when job title change
@@ -118,11 +123,11 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   private addTipRateFormControl(tipRate: number = 0) {
     this.employeeForm.addControl('tipRate', new FormControl({
       value: tipRate,
-      disabled: false
+      disabled: this.currentCRUState === CRU_STATE.Read
     }, { validators: [Validators.required, Validators.min(1)] }));
   }
 
-  saveNewEmployee() {
+  saveUpdateEmployee() {
     const newEmployeeRaw = this.employeeForm.getRawValue();
     let newEmployee;
 
@@ -132,7 +137,15 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       newEmployee = new EmployeeKitchen(newEmployeeRaw);
     }
 
-    this.store.dispatch(new AddEmployee(newEmployee));
+    if (this.currentCRUState === CRU_STATE.Create) {
+      this.store.dispatch(new AddEmployee(newEmployee));
+    } else {
+      const updatedEmployee: Update<Employee> = {
+        id: this.employee.id,
+        changes: newEmployee
+      };
+      this.store.dispatch(new UpdateEmployee({ employee: updatedEmployee }));
+    }
   }
 
   private setCurrentJobTitles(area: AREA) {

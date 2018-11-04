@@ -145,10 +145,11 @@
 </form>
 
 <button
+  *ngIf="currentCRUState !== cruStates.Read"
   mat-flat-button
-  (click)="saveNewEmployee()"
+  (click)="saveUpdateEmployee()"
   [disabled]="employeeForm.invalid"
   color="primary"
 >
-  Save
+  {{ currentCRUState === cruStates.Create ? 'Save' : 'Update' }}
 </button>

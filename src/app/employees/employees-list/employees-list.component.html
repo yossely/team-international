@@ -93,12 +93,14 @@
       >
         <button
           mat-icon-button
+          [routerLink]="'employee'"
           (click)="editEmployee(element)"
         >
           <mat-icon aria-label="Edit Employee">edit</mat-icon>
         </button>
         <button
           mat-icon-button
+          [routerLink]="'employee'"
           (click)="viewEmployee(element)"
         >
           <mat-icon aria-label="View Employee Details">remove_red_eye</mat-icon>
