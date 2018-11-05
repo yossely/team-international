@@ -34,6 +34,7 @@
         name="name"
         required
       >
+      <mat-error *ngIf="employeeForm.get('name').hasError('required')">This field is required</mat-error>
     </mat-form-field>
 
     <!-- Birth date -->
@@ -57,6 +58,7 @@
         #birthDatePicker
         [startAt]="eighteenYearsBeforeToday"
       ></mat-datepicker>
+      <mat-error *ngIf="employeeForm.get('birthDate').hasError('required')">This field is required</mat-error>
     </mat-form-field>
 
     <!-- Country -->
@@ -75,6 +77,7 @@
           {{ country.name }}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="employeeForm.get('country').hasError('required')">This field is required</mat-error>
     </mat-form-field>
 
     <!-- Username -->
@@ -86,8 +89,8 @@
         name="username"
         required
       >
-      <mat-error *ngIf="employeeForm.get('username').hasError('pattern') &&
-              !employeeForm.get('username').hasError('required')">Special characters are NOT allowed</mat-error>
+      <mat-error *ngIf="employeeForm.get('username').hasError('pattern')">Special characters are NOT allowed</mat-error>
+      <mat-error *ngIf="employeeForm.get('username').hasError('required')">This field is required</mat-error>
     </mat-form-field>
 
     <!-- Hire date -->
@@ -107,6 +110,7 @@
         [for]="hireDatePicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #hireDatePicker></mat-datepicker>
+      <mat-error *ngIf="employeeForm.get('hireDate').hasError('required')">This field is required</mat-error>
     </mat-form-field>
 
     <mat-divider></mat-divider>
@@ -144,6 +148,7 @@
           {{ jobTitle }}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="employeeForm.get('jobTitle').hasError('required')">This field is required</mat-error>
     </mat-form-field>
 
     <!-- Tip Rate -->
@@ -161,6 +166,8 @@
         required
       >
       <span matPrefix>%</span>
+      <mat-error *ngIf="employeeForm.get('tipRate').hasError('required')">This field is required</mat-error>
+      <mat-error *ngIf="employeeForm.get('tipRate').hasError('min')">The value must be greater than 0</mat-error>
     </mat-form-field>
 
     <!-- Status -->
