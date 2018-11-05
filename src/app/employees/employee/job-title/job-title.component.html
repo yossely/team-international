@@ -1,0 +1,34 @@
+<mat-form-field>
+  <mat-select
+    [formControl]="jobTitleFormControl"
+    placeholder="Job Title"
+    name="jobTitle"
+    required
+  >
+    <mat-option
+      *ngFor="let jobTitle of currentJobTitles"
+      [value]="jobTitle"
+    >
+      {{ jobTitle }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="jobTitleFormControl.hasError('required')">This field is required</mat-error>
+</mat-form-field>
+
+<!-- Tip Rate -->
+<mat-form-field *ngIf="(jobTitleFormControl.value === 'Waitress' ||
+    jobTitleFormControl.value === 'Dinning Room Manager') && !!tipRateFormControl">
+  <input
+    [formControl]="tipRateFormControl"
+    matInput
+    type="number"
+    placeholder="Tip Rate"
+    name="tipRate"
+    min="0"
+    class="example-right-align"
+    required
+  >
+  <span matPrefix>%</span>
+  <mat-error *ngIf="tipRateFormControl.hasError('required')">This field is required</mat-error>
+  <mat-error *ngIf="tipRateFormControl.hasError('min')">The value must be greater than 0</mat-error>
+</mat-form-field>

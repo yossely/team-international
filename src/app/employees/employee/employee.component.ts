@@ -40,7 +40,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   jobs: Job[];
   currentJobTitles: string[];
 
-  private employee: Employee;
+  employee: Employee;
+  disableFields = false;
   currentCRUState: CRU_STATE;
   cruStates = CRU_STATE;
 
@@ -64,65 +65,39 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
     this.employeeSubs = this.store.pipe(select(getSelectedEmployee)).subscribe((cruState: CRUEmployeeModel) => {
       this.employee = cruState.employee;
-      this.setCurrentJobTitles(this.employee.area);
 
       this.currentCRUState = cruState.action;
-      const disableFields = this.currentCRUState === CRU_STATE.Read;
+      this.disableFields = this.currentCRUState === CRU_STATE.Read;
 
       this.employeeForm = this.fb.group({
         name: new FormControl({
           value: this.employee.name,
-          disabled: disableFields
+          disabled: this.disableFields
         }, { validators: Validators.required }),
         birthDate: new FormControl({
           value: this.employee.birthDate,
-          disabled: disableFields
+          disabled: this.disableFields
         }, { validators: Validators.required }),
         country: new FormControl({
           value: this.employee.country,
-          disabled: disableFields
+          disabled: this.disableFields
         }),
         username: new FormControl({
           value: this.employee.username,
-          disabled: disableFields
+          disabled: this.disableFields
         }, { validators: [Validators.required, Validators.pattern(/^[\w]+$/)] }),
         hireDate: new FormControl({
           value: this.employee.hireDate,
-          disabled: disableFields
+          disabled: this.disableFields
         }, { validators: Validators.required }),
         status: new FormControl({
           value: this.employee.status,
-          disabled: disableFields
+          disabled: this.disableFields
         }, { validators: Validators.required }),
         area: new FormControl({
           value: this.employee.area,
-          disabled: disableFields
+          disabled: this.disableFields
         }, { validators: Validators.required }),
-        jobTitle: new FormControl({
-          value: this.employee.jobTitle,
-          disabled: disableFields
-        }, { validators: Validators.required }),
-      });
-
-      // Update job titles options when area change
-      this.employeeForm.get('area').valueChanges.subscribe(v => {
-        this.employeeForm.get('jobTitle').setValue(undefined);
-        this.setCurrentJobTitles(v);
-      });
-
-      // Set tip rate form control when setting up the form group
-      if (this.employee.jobTitle &&
-        (this.employee.jobTitle === 'Waitress' || this.employee.jobTitle === 'Dinning Room Manager')) {
-        this.addTipRateFormControl((this.employee as EmployeeService).tipRate);
-      }
-
-      // Update tip rate form control when job title change
-      this.employeeForm.get('jobTitle').valueChanges.subscribe(jt => {
-        if (jt === 'Waitress' || jt === 'Dinning Room Manager') {
-          this.addTipRateFormControl();
-        } else {
-          this.employeeForm.removeControl('tipRate');
-        }
       });
     });
 
@@ -135,13 +110,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   compareCountry(countryOpt: Country, countrySelected: Country) {
     return countrySelected ? countryOpt.name === countrySelected.name : false;
-  }
-
-  private addTipRateFormControl(tipRate: number = 0) {
-    this.employeeForm.addControl('tipRate', new FormControl({
-      value: tipRate,
-      disabled: this.currentCRUState === CRU_STATE.Read
-    }, { validators: [Validators.required, Validators.min(0)] }));
   }
 
   loadCountries() {
@@ -166,12 +134,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigate(['']);
-  }
-
-  private setCurrentJobTitles(area: AREA) {
-    this.currentJobTitles = this.jobs
-      .filter(j => j.area === area)
-      .map(j => j.jobTitles)[0];
   }
 
   ngOnDestroy() {

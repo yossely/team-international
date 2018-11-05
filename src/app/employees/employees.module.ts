@@ -27,6 +27,7 @@ import { EmployeesListComponent } from './employees-list/employees-list.componen
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { InputSearchModule } from 'ngx-input-search';
 import { SharedModule } from '../shared/shared.module';
+import { JobTitleComponent } from './employee/job-title/job-title.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { SharedModule } from '../shared/shared.module';
     EmployeesComponent,
     EmployeesListComponent,
     EmployeeComponent,
+    JobTitleComponent,
   ],
   providers: [
     MatDatepickerModule

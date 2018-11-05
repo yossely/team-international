@@ -134,41 +134,12 @@
     </div>
 
     <!-- Job Title -->
-    <mat-form-field>
-      <mat-select
-        formControlName="jobTitle"
-        placeholder="Job Title"
-        name="jobTitle"
-        required
-      >
-        <mat-option
-          *ngFor="let jobTitle of currentJobTitles"
-          [value]="jobTitle"
-        >
-          {{ jobTitle }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="employeeForm.get('jobTitle').hasError('required')">This field is required</mat-error>
-    </mat-form-field>
-
-    <!-- Tip Rate -->
-    <mat-form-field *ngIf="(employeeForm.get('jobTitle').value === 'Waitress' ||
-     employeeForm.get('jobTitle').value === 'Dinning Room Manager') &&
-     employeeForm.get('tipRate')">
-      <input
-        formControlName="tipRate"
-        matInput
-        type="number"
-        placeholder="Tip Rate"
-        name="tipRate"
-        min="0"
-        class="example-right-align"
-        required
-      >
-      <span matPrefix>%</span>
-      <mat-error *ngIf="employeeForm.get('tipRate').hasError('required')">This field is required</mat-error>
-      <mat-error *ngIf="employeeForm.get('tipRate').hasError('min')">The value must be greater than 0</mat-error>
-    </mat-form-field>
+    <app-job-title
+      [area]="employeeForm.get('area').value"
+      [formGroupParent]="employeeForm"
+      [employee]="employee"
+      [disabled]="disableFields"
+    ></app-job-title>
 
     <!-- Status -->
     <mat-slide-toggle
