@@ -50,7 +50,8 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     EmployeesComponent,
     EmployeesListComponent,
-    EmployeeComponent],
+    EmployeeComponent,
+  ],
   providers: [
     MatDatepickerModule
   ]

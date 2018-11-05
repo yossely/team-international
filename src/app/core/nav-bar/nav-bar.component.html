@@ -1,0 +1,10 @@
+<mat-toolbar>
+  <a
+    mat-icon-button
+    *ngIf="!!parentRoute"
+    [routerLink]="parentRoute"
+  >
+    <mat-icon aria-label="Go Back">arrow_back</mat-icon>
+  </a>
+  {{ title }}
+</mat-toolbar>
