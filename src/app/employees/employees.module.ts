@@ -21,10 +21,11 @@ import {
   MatTableModule,
 } from '@angular/material';
 
-import { EmployeesRoutingModule } from './employees-routing.module';
+import { EmployeeComponent } from './employee/employee.component';
 import { EmployeesComponent } from './employees.component';
 import { EmployeesListComponent } from './employees-list/employees-list.component';
-import { EmployeeComponent } from './employee/employee.component';
+import { EmployeesRoutingModule } from './employees-routing.module';
+import { InputSearchModule } from 'ngx-input-search';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -33,6 +34,7 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     EmployeesRoutingModule,
     SharedModule,
+    InputSearchModule,
 
     MatButtonModule,
     MatButtonToggleModule,

@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatDialogRef, MatDialog } from '@angular/material';
+import { MatPaginator, MatSort, MatDialogRef, MatDialog, MatTableDataSource } from '@angular/material';
 
-import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store';
+import { Store, select } from '@ngrx/store';
+import { AppState, selectAllEmployees } from 'src/app/store';
 
 import { filter } from 'rxjs/operators';
 
-import { EmployeesListDataSource } from './employees-list-datasource';
 import { Employee } from '../shared/employee.model';
 import { DeleteEmployee } from '../../store/employees/employees.actions';
 import { ConfirmationModalComponent } from 'src/app/shared/components/confirmation-modal/confirmation-modal.component';
@@ -19,7 +18,7 @@ import { ConfirmationModalComponent } from 'src/app/shared/components/confirmati
 export class EmployeesListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: EmployeesListDataSource;
+  dataSource: MatTableDataSource<Employee>;
 
   /** Columns displayed in the table */
   displayedColumns = ['name', 'age', 'username', 'hireDate', 'actions'];
@@ -32,10 +31,25 @@ export class EmployeesListComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private dialog: MatDialog
-  ) { }
+  ) {
+    this.store.pipe(select(selectAllEmployees))
+      .subscribe(e => {
+        this.dataSource = new MatTableDataSource(e);
+      });
+  }
 
   ngOnInit() {
-    this.dataSource = new EmployeesListDataSource(this.paginator, this.sort, this.store);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  filterEmployees($event: Event) {
+    const stringEmitted = ($event.target as HTMLInputElement).value;
+    this.dataSource.filter = stringEmitted.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   deleteEmployee(emp: Employee) {

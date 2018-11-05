@@ -3981,6 +3981,12 @@ neo-async@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
+ngx-input-search@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ngx-input-search/-/ngx-input-search-1.0.2.tgz#ac3f6b26bcd7faa9ebf4618cbaa3b07598320e09"
+  dependencies:
+    tslib "^1.9.0"
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
