@@ -130,7 +130,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.addControl('tipRate', new FormControl({
       value: tipRate,
       disabled: this.currentCRUState === CRU_STATE.Read
-    }, { validators: [Validators.required, Validators.min(1)] }));
+    }, { validators: [Validators.required, Validators.min(0)] }));
   }
 
   saveUpdateEmployee() {
