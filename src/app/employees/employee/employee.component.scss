@@ -1,9 +1,30 @@
-form {
-  display: flex;
-  flex-direction: column;
+.form-container{
+  left: 50%;
   max-width: 500px;
+  min-width: 200px;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 80vw;
+}
+
+form {
+  mat-form-field {
+    display: block;
+  }
+}
+
+mat-divider {
+  margin: 24px 0;
 }
 
 .status-text {
   color: #b3b3b3;
+}
+
+.area {
+  margin-bottom: 16px;
+}
+
+.actions {
+  float: right;
 }

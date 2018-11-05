@@ -1,4 +1,3 @@
-<!-- TODO: add navigation back button -->
 <div
   *ngIf="loadingCountries$ | async"
   class="screen-center"
@@ -21,7 +20,10 @@
     TRY AGAIN
   </button>
 </div>
-<ng-container *ngIf="!(loadingCountries$ | async) && !(errorLoadingCountries$ | async)">
+<div
+  *ngIf="!(loadingCountries$ | async) && !(errorLoadingCountries$ | async)"
+  class="form-container"
+>
   <form [formGroup]="employeeForm">
     <!-- Name -->
     <mat-form-field>
@@ -58,7 +60,6 @@
     </mat-form-field>
 
     <!-- Country -->
-    <!-- TODO: implement better search functionality -->
     <mat-form-field>
       <mat-select
         formControlName="country"
@@ -108,8 +109,10 @@
       <mat-datepicker #hireDatePicker></mat-datepicker>
     </mat-form-field>
 
+    <mat-divider></mat-divider>
+
     <!-- Area -->
-    <div>
+    <div class="area">
       <mat-button-toggle-group
         formControlName="area"
         #selectedArea="matButtonToggleGroup"
@@ -172,13 +175,15 @@
     </mat-slide-toggle>
   </form>
 
-  <button
-    *ngIf="currentCRUState !== cruStates.Read"
-    mat-flat-button
-    (click)="saveUpdateEmployee()"
-    [disabled]="employeeForm.invalid"
-    color="primary"
-  >
-    {{ currentCRUState === cruStates.Create ? 'SAVE' : 'UPDATE' }}
-  </button>
-</ng-container>
+  <div class="actions">
+    <button
+      *ngIf="currentCRUState !== cruStates.Read"
+      mat-flat-button
+      (click)="saveUpdateEmployee()"
+      [disabled]="employeeForm.invalid"
+      color="primary"
+    >
+      {{ currentCRUState === cruStates.Create ? 'SAVE' : 'UPDATE' }}
+    </button>
+  </div>
+</div>
