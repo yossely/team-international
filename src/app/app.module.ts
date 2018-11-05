@@ -11,6 +11,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { reducers } from './store';
 import { CoreEffects } from './store/core/core.effects';
 
+import { MatToolbarModule } from '@angular/material';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesModule } from './employees/employees.module';
@@ -30,7 +31,8 @@ import { CustomSerializer } from './store/router/router.reducer';
     StoreRouterConnectingModule.forRoot(),
     StoreDevtoolsModule.instrument(),
     EmployeesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatToolbarModule,
   ],
   providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
   bootstrap: [AppComponent]
