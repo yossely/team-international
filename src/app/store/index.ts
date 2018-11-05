@@ -38,6 +38,16 @@ export const selectCountries = createSelector(
   (state: CoreState) => state.countries
 );
 
+export const selectLoadingCountries = createSelector(
+  (state: AppState) => state.core,
+  (state: CoreState) => state.loadingCountries
+);
+
+export const selectErrorLoadingCountries = createSelector(
+  (state: AppState) => state.core,
+  (state: CoreState) => state.errorLoadingCountries
+);
+
 // Employees Selectors
 export const selectEmployeesState = createFeatureSelector<fromEmployee.EmployeesState>('employees');
 

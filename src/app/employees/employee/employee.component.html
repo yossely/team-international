@@ -1,160 +1,184 @@
 <!-- TODO: add navigation back button -->
-<form [formGroup]="employeeForm">
-  <!-- Name -->
-  <mat-form-field>
-    <input
-      matInput
-      formControlName="name"
-      placeholder="Name"
-      name="name"
-      required
-    >
-  </mat-form-field>
-
-  <!-- Birth date -->
-  <mat-form-field>
-    <input
-      matInput
-      formControlName="birthDate"
-      [matDatepicker]="birthDatePicker"
-      [max]="eighteenYearsBeforeToday"
-      (click)="birthDatePicker.open()"
-      placeholder="Date of birth"
-      name="birthDate"
-      readonly
-      required
-    >
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="birthDatePicker"
-    ></mat-datepicker-toggle>
-    <mat-datepicker
-      #birthDatePicker
-      [startAt]="eighteenYearsBeforeToday"
-    ></mat-datepicker>
-  </mat-form-field>
-
-  <!-- Country -->
-  <!-- TODO: implement better search functionality -->
-  <mat-form-field>
-    <mat-select
-      formControlName="country"
-      [compareWith]="compareCountry"
-      placeholder="Country"
-      name="country"
-      required
-    >
-      <mat-option
-        *ngFor="let country of countries$ | async"
-        [value]="country"
+<div
+  *ngIf="loadingCountries$ | async"
+  class="screen-center"
+>
+  <mat-spinner></mat-spinner>
+</div>
+<div
+  *ngIf="errorLoadingCountries$ | async"
+  class="screen-center"
+>
+  <h3>
+    <mat-icon>error_outline</mat-icon>
+    Ooops! Error loading countries
+  </h3>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="loadCountries()"
+  >
+    TRY AGAIN
+  </button>
+</div>
+<ng-container *ngIf="!(loadingCountries$ | async) && !(errorLoadingCountries$ | async)">
+  <form [formGroup]="employeeForm">
+    <!-- Name -->
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Name"
+        name="name"
+        required
       >
-        {{ country.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    </mat-form-field>
 
-  <!-- Username -->
-  <mat-form-field>
-    <input
-      formControlName="username"
-      matInput
-      placeholder="Username"
-      name="username"
-      required
-    >
-    <mat-error *ngIf="employeeForm.get('username').hasError('pattern') &&
+    <!-- Birth date -->
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="birthDate"
+        [matDatepicker]="birthDatePicker"
+        [max]="eighteenYearsBeforeToday"
+        (click)="birthDatePicker.open()"
+        placeholder="Date of birth"
+        name="birthDate"
+        readonly
+        required
+      >
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="birthDatePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker
+        #birthDatePicker
+        [startAt]="eighteenYearsBeforeToday"
+      ></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Country -->
+    <!-- TODO: implement better search functionality -->
+    <mat-form-field>
+      <mat-select
+        formControlName="country"
+        [compareWith]="compareCountry"
+        placeholder="Country"
+        name="country"
+        required
+      >
+        <mat-option
+          *ngFor="let country of countries$ | async"
+          [value]="country"
+        >
+          {{ country.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Username -->
+    <mat-form-field>
+      <input
+        formControlName="username"
+        matInput
+        placeholder="Username"
+        name="username"
+        required
+      >
+      <mat-error *ngIf="employeeForm.get('username').hasError('pattern') &&
               !employeeForm.get('username').hasError('required')">Special characters are NOT allowed</mat-error>
-  </mat-form-field>
+    </mat-form-field>
 
-  <!-- Hire date -->
-  <mat-form-field>
-    <input
-      formControlName="hireDate"
-      matInput
-      [matDatepicker]="hireDatePicker"
-      (click)="hireDatePicker.open()"
-      placeholder="Hire Date"
-      name="hireDate"
-      readonly
-      required
-    >
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="hireDatePicker"
-    ></mat-datepicker-toggle>
-    <mat-datepicker #hireDatePicker></mat-datepicker>
-  </mat-form-field>
-
-  <!-- Area -->
-  <div>
-    <mat-button-toggle-group
-      formControlName="area"
-      #selectedArea="matButtonToggleGroup"
-      name="area"
-      aria-label="Employee area"
-      required
-    >
-      <mat-button-toggle
-        *ngFor="let job of jobs"
-        [value]="job.area"
+    <!-- Hire date -->
+    <mat-form-field>
+      <input
+        formControlName="hireDate"
+        matInput
+        [matDatepicker]="hireDatePicker"
+        (click)="hireDatePicker.open()"
+        placeholder="Hire Date"
+        name="hireDate"
+        readonly
+        required
       >
-        {{ job.area }}
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="hireDatePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #hireDatePicker></mat-datepicker>
+    </mat-form-field>
 
-  <!-- Job Title -->
-  <mat-form-field>
-    <mat-select
-      formControlName="jobTitle"
-      placeholder="Job Title"
-      name="jobTitle"
-      required
-    >
-      <mat-option
-        *ngFor="let jobTitle of currentJobTitles"
-        [value]="jobTitle"
+    <!-- Area -->
+    <div>
+      <mat-button-toggle-group
+        formControlName="area"
+        #selectedArea="matButtonToggleGroup"
+        name="area"
+        aria-label="Employee area"
+        required
       >
-        {{ jobTitle }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+        <mat-button-toggle
+          *ngFor="let job of jobs"
+          [value]="job.area"
+        >
+          {{ job.area }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
 
-  <!-- Tip Rate -->
-  <mat-form-field *ngIf="(employeeForm.get('jobTitle').value === 'Waitress' ||
+    <!-- Job Title -->
+    <mat-form-field>
+      <mat-select
+        formControlName="jobTitle"
+        placeholder="Job Title"
+        name="jobTitle"
+        required
+      >
+        <mat-option
+          *ngFor="let jobTitle of currentJobTitles"
+          [value]="jobTitle"
+        >
+          {{ jobTitle }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Tip Rate -->
+    <mat-form-field *ngIf="(employeeForm.get('jobTitle').value === 'Waitress' ||
      employeeForm.get('jobTitle').value === 'Dinning Room Manager') &&
      employeeForm.get('tipRate')">
-    <input
-      formControlName="tipRate"
-      matInput
-      type="number"
-      placeholder="Tip Rate"
-      name="tipRate"
-      min="0"
-      class="example-right-align"
+      <input
+        formControlName="tipRate"
+        matInput
+        type="number"
+        placeholder="Tip Rate"
+        name="tipRate"
+        min="0"
+        class="example-right-align"
+        required
+      >
+      <span matPrefix>%</span>
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-slide-toggle
+      formControlName="status"
+      color="primary"
+      class="status-text"
+      name="status"
       required
     >
-    <span matPrefix>%</span>
-  </mat-form-field>
+      Status
+    </mat-slide-toggle>
+  </form>
 
-  <!-- Status -->
-  <mat-slide-toggle
-    formControlName="status"
+  <button
+    *ngIf="currentCRUState !== cruStates.Read"
+    mat-flat-button
+    (click)="saveUpdateEmployee()"
+    [disabled]="employeeForm.invalid"
     color="primary"
-    class="status-text"
-    name="status"
-    required
   >
-    Status
-  </mat-slide-toggle>
-</form>
-
-<button
-  *ngIf="currentCRUState !== cruStates.Read"
-  mat-flat-button
-  (click)="saveUpdateEmployee()"
-  [disabled]="employeeForm.invalid"
-  color="primary"
->
-  {{ currentCRUState === cruStates.Create ? 'SAVE' : 'UPDATE' }}
-</button>
+    {{ currentCRUState === cruStates.Create ? 'SAVE' : 'UPDATE' }}
+  </button>
+</ng-container>

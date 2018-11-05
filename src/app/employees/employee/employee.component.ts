@@ -5,7 +5,13 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs';
 
 import { Store, select } from '@ngrx/store';
-import { AppState, selectCountries, getSelectedEmployee } from '../../store';
+import {
+  AppState,
+  getSelectedEmployee,
+  selectCountries,
+  selectLoadingCountries,
+  selectErrorLoadingCountries
+} from '../../store';
 import { LoadCountries } from '../../store/core/core.actions';
 
 import { Country } from '../../shared/models/country.model';
@@ -28,6 +34,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   employeeForm: FormGroup;
 
   countries$: Observable<Country[]>;
+  loadingCountries$: Observable<boolean>;
+  errorLoadingCountries$: Observable<boolean>;
 
   jobs: Job[];
   currentJobTitles: string[];
@@ -45,6 +53,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router
   ) {
+    this.loadingCountries$ = this.store.pipe(select(selectLoadingCountries));
+    this.errorLoadingCountries$ = this.store.pipe(select(selectErrorLoadingCountries));
+
     // Rest 18 years to today
     this.eighteenYearsBeforeToday = new Date();
     this.eighteenYearsBeforeToday.setFullYear(this.eighteenYearsBeforeToday.getFullYear() - 18);
@@ -115,7 +126,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.store.dispatch(new LoadCountries());
+    this.loadCountries();
     this.countries$ = this.store.pipe(select(selectCountries));
   }
 
@@ -131,6 +142,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       value: tipRate,
       disabled: this.currentCRUState === CRU_STATE.Read
     }, { validators: [Validators.required, Validators.min(0)] }));
+  }
+
+  loadCountries() {
+    this.store.dispatch(new LoadCountries());
   }
 
   saveUpdateEmployee() {

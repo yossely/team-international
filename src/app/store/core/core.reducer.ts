@@ -17,9 +17,11 @@ export function coreReducer(state = initialState, action: CoreActions): CoreStat
   switch (action.type) {
 
     case CoreActionTypes.LoadCountries: {
+      const loadingCountries = !!state.countries.length ? false : true;
       return {
         ...state,
-        loadingCountries: true
+        loadingCountries,
+        errorLoadingCountries: false
       };
     }
 
@@ -27,7 +29,8 @@ export function coreReducer(state = initialState, action: CoreActions): CoreStat
       return {
         ...state,
         loadingCountries: false,
-        countries: action.payload
+        countries: action.payload,
+        errorLoadingCountries: false
       };
     }
 
