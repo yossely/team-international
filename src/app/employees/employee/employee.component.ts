@@ -13,7 +13,7 @@ import { AREA, availableJobs, Job, Employee } from '../shared/employee.model';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
-import { AddEmployee, UpdateEmployee } from '../../store/employees/employees.actions';
+import { AddEmployee, UpdateEmployee, CRUEmployeeModel } from '../../store/employees/employees.actions';
 
 @Component({
   selector: 'app-employee',
@@ -50,7 +50,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
     this.jobs = availableJobs;
 
-    this.employeeSubs = this.store.pipe(select(getSelectedEmployee)).subscribe((cruState) => {
+    this.employeeSubs = this.store.pipe(select(getSelectedEmployee)).subscribe((cruState: CRUEmployeeModel) => {
       this.employee = cruState.employee;
       this.setCurrentJobTitles(this.employee.area);
 
