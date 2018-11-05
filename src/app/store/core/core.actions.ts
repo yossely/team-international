@@ -3,7 +3,8 @@ import { Country } from '../../shared/models/country.model';
 
 export enum CoreActionTypes {
   LoadCountries = '[Core] Load Countries',
-  LoadCountriesSuccess = '[Core] Load Countries Success'
+  LoadCountriesSuccess = '[Core] Load Countries Success',
+  LoadCountriesFailed = '[Core] Load Countries Failed',
 }
 
 export class LoadCountries implements Action {
@@ -18,4 +19,10 @@ export class LoadCountriesSuccess implements Action {
   constructor(public payload: Country[]) { }
 }
 
-export type CoreActions = LoadCountries | LoadCountriesSuccess;
+export class LoadCountriesFailed implements Action {
+  readonly type = CoreActionTypes.LoadCountriesFailed;
+
+  constructor() { }
+}
+
+export type CoreActions = LoadCountries | LoadCountriesSuccess | LoadCountriesFailed;
