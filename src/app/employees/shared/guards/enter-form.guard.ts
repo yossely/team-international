@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
+import { MatSnackBar } from '@angular/material';
+
 import { Observable } from 'rxjs';
 import { map, tap, finalize } from 'rxjs/operators';
 
@@ -14,7 +16,8 @@ import { CRUEmployeeModel } from '../../../store/employees/employees.actions';
 export class EnterFormGuard implements CanActivate {
   constructor(
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   canActivate(): Observable<boolean> {
@@ -27,6 +30,13 @@ export class EnterFormGuard implements CanActivate {
       finalize(() => {
         if (!employeeExists) {
           this.router.navigateByUrl('/');
+          this.snackBar.open(
+            'Sorry, employee does not exists',
+            'OK',
+            {
+              duration: 3000
+            }
+          );
         }
       })
     );
