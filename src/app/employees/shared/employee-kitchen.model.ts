@@ -1,4 +1,5 @@
-import { Employee, AREA } from './employee.model';
+import { Employee } from './employee.model';
+import { AREA } from './job.model';
 
 export interface EmployeeKitchen {
   area: AREA.KITCHEN;

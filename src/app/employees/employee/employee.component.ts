@@ -9,7 +9,8 @@ import { AppState, selectCountries, getSelectedEmployee } from '../../store';
 import { LoadCountries } from '../../store/core/core.actions';
 
 import { Country } from '../../shared/models/country.model';
-import { AREA, availableJobs, Job, Employee } from '../shared/employee.model';
+import { Employee } from '../shared/employee.model';
+import { Job, availableJobs, AREA } from '../shared/job.model';
 import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';

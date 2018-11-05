@@ -1,39 +1,9 @@
 import { Country } from '../../shared/models/country.model';
-import { BasicModel } from '../../shared/utils/basic-model.model';
 
 import * as uuidv1 from 'uuid/v1';
 
-export enum AREA {
-  SERVICES = 'Services',
-  KITCHEN = 'Kitchen'
-}
-
-export interface Job {
-  area: AREA;
-  jobTitles: string[];
-}
-
-export const availableJobs: Job[] = [
-  {
-    area: AREA.SERVICES,
-    jobTitles: [
-      'Manager',
-      'Host',
-      'Tuttofare',
-      'Waitress',
-      'Dinning Room Manager',
-    ]
-  },
-  {
-    area: AREA.KITCHEN,
-    jobTitles: [
-      'Chef',
-      'Sous Chef',
-      'Dishwasher',
-      'Cook',
-    ]
-  }
-];
+import { BasicModel } from '../../shared/utils/basic-model.model';
+import { AREA } from './job.model';
 
 export interface Employee {
   id: string;
