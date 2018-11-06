@@ -58,8 +58,8 @@ export class EmployeesListComponent implements OnInit {
       data: {
         title: 'Are you sure?',
         body: `Do you want to delete the employee ${emp.name}`,
-        cancelButton: 'Cancel',
-        confirmButton: 'Delete'
+        cancelButton: 'CANCEL',
+        confirmButton: 'DELETE'
       }
     });
 

@@ -1,3 +1,13 @@
+<h2>
+  <a
+    mat-icon-button
+    routerLink="/"
+  >
+    <mat-icon aria-label="Go Back">arrow_back</mat-icon>
+  </a>
+  New Employee
+</h2>
+
 <div
   *ngIf="loadingCountries$ | async"
   class="screen-center"
@@ -6,7 +16,7 @@
 </div>
 <div
   *ngIf="errorLoadingCountries$ | async"
-  class="screen-center"
+  class="screen-center network-error"
 >
   <h3>
     <mat-icon>error_outline</mat-icon>
@@ -21,7 +31,7 @@
   </button>
 </div>
 <div
-  *ngIf="!(loadingCountries$ | async) && !(errorLoadingCountries$ | async)"
+  *ngIf="!(loadingCountries$ | async) && !(errorLoadingCountries$ | async) && !!employeeForm"
   class="form-container"
 >
   <form [formGroup]="employeeForm">

@@ -21,6 +21,7 @@ import { CRU_STATE } from '../../shared/models/cru-states.enum';
 import { EmployeeService } from '../shared/employee-services.model';
 import { EmployeeKitchen } from '../shared/employee-kitchen.model';
 import { AddEmployee, UpdateEmployee, CRUEmployeeModel } from '../../store/employees/employees.actions';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-employee',
@@ -49,6 +50,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   cruState$: Observable<CRU_STATE>;
 
+  private submitted = false;
+
+  private isEmployeeFormDirty: boolean;
+
   constructor(
     private fb: FormBuilder,
     private store: Store<AppState>,
@@ -63,7 +68,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
     this.jobs = availableJobs;
 
-    this.employeeSubs = this.store.pipe(select(getSelectedEmployee)).subscribe((cruState: CRUEmployeeModel) => {
+    this.employeeSubs = this.store.pipe(
+      select(getSelectedEmployee),
+      take(1)
+    ).subscribe((cruState: CRUEmployeeModel) => {
       this.employee = cruState.employee;
 
       this.currentCRUState = cruState.action;
@@ -99,6 +107,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
           disabled: this.disableFields
         }, { validators: Validators.required }),
       });
+
+      this.employeeForm.valueChanges.subscribe(() => {
+        this.isEmployeeFormDirty = this.employeeForm.dirty;
+      });
     });
 
     this.loadCountries();
@@ -106,6 +118,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+  }
+
+  canDeactivate() {
+    return !this.isEmployeeFormDirty || this.submitted;
   }
 
   compareCountry(countryOpt: Country, countrySelected: Country) {
@@ -133,6 +149,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       this.store.dispatch(new UpdateEmployee(newEmployee));
     }
 
+    this.submitted = true;
     this.router.navigate(['']);
   }
 

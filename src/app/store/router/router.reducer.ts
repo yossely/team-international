@@ -10,7 +10,6 @@ export interface RouterStateUrl {
   url: string;
   queryParams: Params;
   params: Params;
-  activatedRouteSnapshot: ActivatedRouteSnapshot;
 }
 
 export class CustomSerializer
@@ -29,7 +28,6 @@ export class CustomSerializer
       url,
       queryParams,
       params,
-      activatedRouteSnapshot: state
     };
   }
 }

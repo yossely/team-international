@@ -11,12 +11,10 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { reducers } from './store';
 import { CoreEffects } from './store/core/core.effects';
 
-import { MatToolbarModule } from '@angular/material';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesModule } from './employees/employees.module';
 import { CustomSerializer } from './store/router/router.reducer';
-import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +31,6 @@ import { CoreModule } from './core/core.module';
     StoreDevtoolsModule.instrument(),
     EmployeesModule,
     BrowserAnimationsModule,
-    CoreModule,
   ],
   providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
   bootstrap: [AppComponent]
