@@ -5,7 +5,12 @@
   >
     <mat-icon aria-label="Go Back">arrow_back</mat-icon>
   </a>
-  New Employee
+
+  <span [ngSwitch]="currentCRUState">
+    <span *ngSwitchCase="cruStates.Create">New Employee</span>
+    <span *ngSwitchCase="cruStates.Read">View Employee</span>
+    <span *ngSwitchCase="cruStates.Update">Edit Employee</span>
+  </span>
 </h2>
 
 <div
